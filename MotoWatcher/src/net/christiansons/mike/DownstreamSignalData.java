@@ -2,40 +2,32 @@ package net.christiansons.mike;
 
 public class DownstreamSignalData {
 
-	private final String channelId;
-	private final String frequency;
-	private final String snr;
-	private final String modulation;
-	private final String power;
 	private final SignalStats signalStats;
+	private final DownstreamInfo downstreamInfo;
 
-	public DownstreamSignalData(DownstreamInfo parameterObject, SignalStats signalStats) {
-		this.channelId = parameterObject.channelId;
-		this.frequency = parameterObject.frequency;
-		this.snr = parameterObject.snr;
-		this.modulation = parameterObject.modulation;
-		this.power = parameterObject.power;
+	public DownstreamSignalData(DownstreamInfo downstreamInfo, SignalStats signalStats) {
+		this.downstreamInfo = downstreamInfo;
 		this.signalStats = signalStats;
 	}
 
 	public String getChannelId() {
-		return channelId;
+		return downstreamInfo.channelId;
 	}
 
 	public String getFrequency() {
-		return frequency;
+		return downstreamInfo.frequency;
 	}
 
 	public String getSnr() {
-		return snr;
+		return downstreamInfo.snr;
 	}
 
 	public String getModulation() {
-		return modulation;
+		return downstreamInfo.modulation;
 	}
 
 	public String getPower() {
-		return power;
+		return downstreamInfo.power;
 	}
 
 	public SignalStats getSignalStats() {
@@ -43,7 +35,6 @@ public class DownstreamSignalData {
 	}
 
 	public String toString() {
-		return String.format("Channel %s, %s, %s, %s, %s, %s", channelId,
-				frequency, snr, modulation, power, signalStats);
+		return String.format("%s, %s", downstreamInfo, signalStats);
 	}
 }

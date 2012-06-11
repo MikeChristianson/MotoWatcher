@@ -8,6 +8,7 @@ import java.util.Deque;
 public class MotoWatcher {
 	public static void main(String[] args) throws IOException, MotoException, InterruptedException {
 		SignalData signalData = Moto.getSignalData();
+		
 		Iterable<DownstreamSignalData> downstreamSignalData = signalData.getDownstreamSignalData();
 		Collection<Event> downstreamSignalDataMessages = checkDownstreamSignalData(downstreamSignalData);
 		UpstreamSignalData upstreamSignalData = signalData.getUpstreamSignalData();
@@ -18,7 +19,8 @@ public class MotoWatcher {
 			events.add(checkUpstreamSignalDataMessage);
 		}
 		
-		Notifier.sendNotifications(events);
+		Notifier notifier = new Notifier("apiKey", MotoWatcher.class.getSimpleName());
+		notifier.sendNotifications(events);
 	}
 
 	private static Collection<Event> checkDownstreamSignalData(Iterable<DownstreamSignalData> downstreamSignalData) {

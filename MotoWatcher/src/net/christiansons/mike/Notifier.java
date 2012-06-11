@@ -8,26 +8,33 @@ import net.sourceforge.prowl.exception.ProwlException;
 
 
 public class Notifier {
-	public static void sendNotifications(Collection<Event> events) throws MotoException {
-		if(!events.isEmpty()) {
-			ProwlClient prowl = new ProwlClient();
-			for (Event event : events) {
-				ProwlEvent e = makeProwlEvent(event);
-				try {
-					prowl.pushEvent(e);
-				} catch (ProwlException ex) {
-					throw new MotoException(ex);
-				}
-			}
+	
+	private final String applicationName;
+	private final String apiKey;
+
+	public Notifier(String apiKey, String applicationName) {
+		this.apiKey = apiKey;
+		this.applicationName = applicationName;
+	}
+	
+	public void sendNotifications(Iterable<Event> events) throws MotoException {
+		ProwlClient prowl = new ProwlClient();
+		for (Event event : events) {
+			pushEvent(prowl, event);
 		}
 	}
 
-	private static ProwlEvent makeProwlEvent(Event event) {
-		ProwlEvent e = new DefaultProwlEvent(
-				"d05f692bcc569070492e4b8956e12b713b6b2369", 
-				MotoWatcher.class.getSimpleName(), 
-				event.event, event.message, 0);
-		return e;
+	void pushEvent(ProwlClient prowl, Event event) throws MotoException {
+		ProwlEvent e = makeProwlEvent(event);
+		try {
+			prowl.pushEvent(e);
+		} catch (ProwlException ex) {
+			throw new MotoException(ex);
+		}
+	}
+
+	private ProwlEvent makeProwlEvent(Event event) {
+		return new DefaultProwlEvent(apiKey, applicationName, event.event, event.message, 0);
 	}
 
 }
