@@ -21,16 +21,14 @@ public class MotoParser {
 	private final static XPathContext context = new XPathContext("html", "http://www.w3.org/1999/xhtml");
 
 	public static SignalData getSignalData(String url) throws IOException, MotoException {
-		final Document signal = getStatusPageAsDocument(url);
-		final SignalData signalData = getSignalData(signal);
+		final Document statusPage = getStatusPageAsDocument(url);
+		final SignalData signalData = getSignalData(statusPage);
 		return signalData;
 	}
 
 	private static Document getStatusPageAsDocument(String url) throws MotoException, IOException {
 		try {
 			return buildDocument(url);
-		} catch(IOException ioe) {
-			throw ioe;
 		} catch(Exception e) {
 			throw new MotoException(e);
 		}
@@ -39,13 +37,12 @@ public class MotoParser {
 	private static Document buildDocument(String url) throws SAXException, ParsingException, ValidityException, IOException {
 		final XMLReader tagsoup = XMLReaderFactory.createXMLReader("org.ccil.cowan.tagsoup.Parser");
 		final Builder bob = new Builder(tagsoup);
-		final Document signal = bob.build(url);
-		return signal;
+		return bob.build(url);
 	}
 
-	private static SignalData getSignalData(final Document signal) {
-		final Iterable<DownstreamSignalData> downstreamSignalData = getDownstreamSignalData(signal);
-		final UpstreamSignalData upstreamSignalData = getUpstreamSignalData(signal);
+	private static SignalData getSignalData(final Document statusPage) {
+		final Iterable<DownstreamSignalData> downstreamSignalData = getDownstreamSignalData(statusPage);
+		final UpstreamSignalData upstreamSignalData = getUpstreamSignalData(statusPage);
 		final SignalData signalData = new SignalData(downstreamSignalData, upstreamSignalData);
 		return signalData;
 	}
