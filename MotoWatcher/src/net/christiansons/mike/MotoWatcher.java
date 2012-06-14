@@ -19,7 +19,7 @@ public class MotoWatcher {
 			events.add(checkUpstreamSignalDataMessage);
 		}
 		
-		Notifier notifier = new Notifier("apiKey", MotoWatcher.class.getSimpleName());
+		ProwlNotifier notifier = new ProwlNotifier("apiKey", MotoWatcher.class.getSimpleName());
 		notifier.sendNotifications(events);
 	}
 
