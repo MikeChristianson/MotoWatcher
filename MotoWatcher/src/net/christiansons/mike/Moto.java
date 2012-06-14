@@ -1,6 +1,8 @@
 package net.christiansons.mike;
 import java.io.IOException;
 
+import nu.xom.Document;
+
 
 public class Moto {
 	public final static String DEFAULT_URL = "http://192.168.100.1/cmSignalData.htm";
@@ -19,8 +21,8 @@ public class Moto {
 		if(args.length == 1) {
 			url = args[0];
 		}
-		SignalData signalData = MotoParser.getSignalData(url);
-		return signalData;
+		Document signalDataDocument = SignalDataDocumentBuilder.build(url);
+		return SignalDataDocumentParser.getSignalData(signalDataDocument); 
 	}
 	
 }

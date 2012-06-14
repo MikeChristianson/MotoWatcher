@@ -1,46 +1,19 @@
 package net.christiansons.mike;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 
-import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Nodes;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
-public class MotoParser {
+public class SignalDataDocumentParser {
 
 	private final static XPathContext context = new XPathContext("html", "http://www.w3.org/1999/xhtml");
 
-	public static SignalData getSignalData(String url) throws IOException, MotoException {
-		final Document statusPage = getStatusPageAsDocument(url);
-		final SignalData signalData = getSignalData(statusPage);
-		return signalData;
-	}
-
-	private static Document getStatusPageAsDocument(String url) throws MotoException, IOException {
-		try {
-			return buildDocument(url);
-		} catch(Exception e) {
-			throw new MotoException(e);
-		}
-	}
-
-	private static Document buildDocument(String url) throws SAXException, ParsingException, ValidityException, IOException {
-		final XMLReader tagsoup = XMLReaderFactory.createXMLReader("org.ccil.cowan.tagsoup.Parser");
-		final Builder bob = new Builder(tagsoup);
-		return bob.build(url);
-	}
-
-	private static SignalData getSignalData(final Document statusPage) {
+	public static SignalData getSignalData(final Document statusPage) {
 		final Iterable<DownstreamSignalData> downstreamSignalData = getDownstreamSignalData(statusPage);
 		final UpstreamSignalData upstreamSignalData = getUpstreamSignalData(statusPage);
 		final SignalData signalData = new SignalData(downstreamSignalData, upstreamSignalData);
